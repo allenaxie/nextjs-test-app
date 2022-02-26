@@ -1,0 +1,1 @@
+// path: domain/new-meetup
