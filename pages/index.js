@@ -15,7 +15,6 @@ const DUMMY_MEETUPS = [
         image: 'https://i.imgur.com/OFpzVta.jpg',
         address: 'Some address',
         description: 'this is a first meetup',
-
     },
     {
         id:'m3',
@@ -23,14 +22,29 @@ const DUMMY_MEETUPS = [
         image: 'https://i.imgur.com/OFpzVta.jpg',
         address: 'Some address',
         description: 'this is a first meetup',
-
     },
 ]
 
 export default function HomePage () {
+
+
+
     return(
         <>
-            <MeetupList meetups={DUMMY_MEETUPS}/>
+        {/* props.meetups from getStaticProps() */}
+            <MeetupList meetups={props.meetups}/> 
         </>
     )
+}
+
+// getStaticProps is a reserved function from Nextjs
+// Nextjs will call this function to get data before rendering page
+export async function getStaticProps() {
+    // fetch data from an API
+    // MUST return an object in getStaticProps
+    return {
+        props: {
+            meetups: DUMMY_MEETUPS
+        }
+    };
 }
