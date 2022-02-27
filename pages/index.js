@@ -37,14 +37,29 @@ export default function HomePage (props) {
     )
 }
 
-// getStaticProps is a reserved function from Nextjs
+// getStaticProps is a reserved function from Nextjs to ensure pre-rendered page contains data
 // Nextjs will call this function to get data before rendering page
+// runs once during build
 export async function getStaticProps() {
     // fetch data from an API
     // MUST return an object in getStaticProps
     return {
         props: {
             meetups: DUMMY_MEETUPS
-        }
+        },
+        // incremental static generation
+        // 1 represents number of seconds nextjs will revalidate data (every 1 seconds)
+        revalidate: 1
     };
 }
+
+// // only runs on the server after deployment, users do not see this code
+// // runs for every request
+// export async function getServerSideProps(context) {
+//     const req = context.req;
+//     const res = context.res;
+//     // fetch data from an API
+//     return {
+//         props: DUMMY_MEETUPS
+//     };
+// }
