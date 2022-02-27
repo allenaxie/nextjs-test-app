@@ -25,7 +25,7 @@ const DUMMY_MEETUPS = [
     },
 ]
 
-export default function HomePage () {
+export default function HomePage (props) {
 
 
 
