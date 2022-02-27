@@ -1,29 +1,6 @@
 import MeetupList from '../components/meetups/MeetupList';
+import { MongoClient } from 'mongodb';
 
-const DUMMY_MEETUPS = [
-    {
-        id:'m1',
-        title: 'A First Meetup',
-        image: 'https://i.imgur.com/OFpzVta.jpg',
-        address: 'Some address',
-        description: 'this is a first meetup',
-
-    },
-    {
-        id:'m2',
-        title: 'A second Meetup',
-        image: 'https://i.imgur.com/OFpzVta.jpg',
-        address: 'Some address',
-        description: 'this is a first meetup',
-    },
-    {
-        id:'m3',
-        title: 'A third Meetup',
-        image: 'https://i.imgur.com/OFpzVta.jpg',
-        address: 'Some address',
-        description: 'this is a first meetup',
-    },
-]
 
 export default function HomePage (props) {
 
@@ -42,10 +19,23 @@ export default function HomePage (props) {
 // runs once during build
 export async function getStaticProps() {
     // fetch data from an API
+    // Connect to mongoDB - NEVER run on client side - this file will not run on client side so it is secure
+    const client = await MongoClient.connect('mongodb+srv://allen:gasei1@development.7tcu8.mongodb.net/meetups?retryWrites=true&w=majority');
+    const db = client.db();
+    const meetupsCollection = db.collection('meetups');
+
+    const meetups = await meetupsCollection.find().toArray();
+    client.close();
+    console.log(meetups)
     // MUST return an object in getStaticProps
     return {
         props: {
-            meetups: DUMMY_MEETUPS
+            meetups: meetups.map(meetup => ({
+                title: meetup.data.title,
+                address: meetup.data.address,
+                image: meetup.data.image,
+                id: meetup._id.toString(),
+            }))
         },
         // incremental static generation
         // 1 represents number of seconds nextjs will revalidate data (every 1 seconds)
